@@ -27,6 +27,10 @@ end
 function level_draw()
   cls()
   rectfill(0,0,127,127,13)
+  rectfill(48,48,48 + 32 -1,48 + 32 -1,1)
+  -- line(0,63,63,63,0)
+  -- line(63,63,63,127,0)
+  rectfill(0,104,127,127,15)
 end
 
 __gfx__
