@@ -16,7 +16,12 @@ end
 
 function run_level()
   donut = {
-    sprite = 0,
+    draw = function(self)
+      spr(0,64 - 8,64 - 12,1,3)
+      spr(0,64 - 8 + 8,64 - 12,1,3,true,false)
+    end,
+    width = 16,
+    height = 24,
     choc = false,
     sprinkles = false,
     pick_version = function(self)
@@ -46,6 +51,7 @@ function level_draw()
   -- line(63,63,63,127,0)
   rectfill(0,104,127,127,15) --order text
   print(order.order_text,1,105,0)
+  donut:draw()
 
 end
 
