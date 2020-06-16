@@ -62,7 +62,6 @@ function level_draw()
   print(order.order_text,1,105,0) --order text
   food:draw()
   instructions:draw()
-
 end
 
 function make_order(food)
@@ -91,8 +90,20 @@ function make_donut()
     choc = false,
     sprinkles = false,
     pick_version = function(self)
-      self.choc = true
-      self.order_text = 'just chocolate please'
+      local num = flr(rnd(4))  
+      if num == 0 then
+        self.choc = true
+        self.order_text = 'just chocolate please'
+      elseif num == 1 then
+        self.sprinkles = true
+        self.order_text = 'i only want sprinkles'
+      elseif num == 2 then
+        self.choc = true
+        self.sprinkles = true
+        self.order_text = 'gimme everything!'
+      else
+        self.order_text = 'i like it plain'
+      end
       return self
     end,
     order_text = '',
