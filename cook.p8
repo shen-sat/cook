@@ -32,6 +32,15 @@ function run_level()
     order_text = ''
   }
 
+  instructions = {
+    up = {
+      sprite = 1
+    },
+    down = {
+      sprite = 2
+    }
+  }
+
   order = make_order(donut)
 
   game.update = level_update
