@@ -15,57 +15,100 @@ function _draw()
 end
 
 function run_level()
-  donut = {
-    draw = function(self)
-      spr(0,64 - 8,64 - 12,1,3)
-      spr(0,64 - 8 + 8,64 - 12,1,3,true,false)
-    end,
-    width = 16,
-    height = 24,
-    choc = false,
-    sprinkles = false,
-    pick_version = function(self)
-      self.choc = true
-      self.order_text = 'with chocolate please'
-      return self
-    end,
-    order_text = ''
-  }
-
   instructions = {
-    up = {
-      sprite = 1
-    },
-    down = {
-      sprite = 2
-    }
+    x = 81,
+    y = 48,
+    draw = function(self)
+      local lx, ly = self.x, self.y
+      rect(lx,ly,126,48 + 32 -1,7)
+      lx += 2
+      ly += 2
+      print(food.instructions.up,lx,ly,7)
+      ly += 6
+      print(food.instructions.down,lx,ly,7)
+      ly+=6
+      print('❎ serve',lx,ly,7)
+    end
   }
 
-  order = make_order(donut)
+  score = 0
+
+  food = make_donut()
+  order = make_order(make_donut())
+  
 
   game.update = level_update
   game.draw = level_draw
 end
 
 function level_update()
-  --controls (goes from 0-5)
-  -- if btn(0) then do_something() end
+  food:update()
+  if btnp(5) then
+    if food:is_match(order) then score += 1 end
+    food = make_donut()
+    order = make_order(make_donut())
+  end
 end
 
 function level_draw()
   cls()
-  rectfill(0,0,127,127,13)
+  rectfill(0,0,127,127,13) --backgorund
+  print(score,0,0,7)
+  print(food.choc,10,10,7)
   rectfill(48,48,48 + 32 -1,48 + 32 -1,1) --stage
   -- line(0,63,63,63,0)
   -- line(63,63,63,127,0)
   rectfill(0,104,127,127,15) --order text
-  print(order.order_text,1,105,0)
-  donut:draw()
+  print(order.order_text,1,105,0) --order text
+  food:draw()
+  instructions:draw()
 
 end
 
 function make_order(food)
   return food:pick_version()
+end
+
+function make_donut()
+  local d = {
+    draw = function(self)
+      if self.choc == true then pal(15,4) end
+      spr(0,64 - 8,64 - 12,1,3)
+      spr(0,64 - 8 + 8,64 - 12,1,3,true,false)
+      if self.sprinkles then
+        pset(59,59,11)
+        pset(63,56,14)
+        pset(70,64,11)
+        pset(61,67,14)
+        pset(69,67,14)
+        pset(59,69,11)
+        pset(69,58,11)
+      end
+      line(68,61,68,65,7) -- shine
+      pset(67,66,7) -- shine
+      pal()
+    end,
+    choc = false,
+    sprinkles = false,
+    pick_version = function(self)
+      self.choc = true
+      self.order_text = 'just chocolate please'
+      return self
+    end,
+    order_text = '',
+    update = function(self)
+      if btnp(2) then self.choc = true end
+      if btnp(3) then self.sprinkles = true end
+    end,
+    instructions = {
+      up = '⬆️ choc',
+      down = '⬇️ sprnkls'
+    },
+    is_match = function(self, order)
+      return self.choc == order.choc and self.sprinkles == order.sprinkles
+    end
+  }
+  return d
 end
 
 __gfx__
