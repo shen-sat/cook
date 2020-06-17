@@ -43,7 +43,7 @@ end
 function level_update()
   food:update()
   if btnp(5) then
-    if food:is_correct() then score += 1 end
+    if food:matches_order() then score += 1 end
     food = make_donut()
     food:assign_order()
   end
@@ -60,8 +60,6 @@ function level_draw()
   print(food.order.order_text,1,105,0) --order text
   food:draw()
   instructions:draw()
-  print(food.attrs.choc,10,10,7)
-  print(food.order.attrs.choc,20,20,7)
 end
 
 function make_donut()
@@ -71,9 +69,9 @@ function make_donut()
      sprinkles = false
     },
     assign_order = function(self)
-     self.order = make_donut():make_order()
+     self.order = make_donut():attach_order()
     end,
-    make_order = function(self)
+    attach_order = function(self)
       local num = flr(rnd(4))
       if num == 0 then
         self.attrs.choc = true
@@ -115,8 +113,15 @@ function make_donut()
       up = '⬆️ choc',
       down = '⬇️ sprnkls'
     },
-    is_correct = function(self)
-      return self.attrs.choc == self.order.attrs.choc and self.attrs.sprinkles == self.order.attrs.sprinkles
+    matches_order = function(self)
+      local result = true
+      for k, v in pairs(self.attrs) do
+       if self.order.attrs[k] != self.attrs[k] then 
+        result = false
+        break 
+       end
+      end
+      return result
     end
   }
   return d
