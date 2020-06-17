@@ -23,9 +23,9 @@ function run_level()
       rect(lx,ly,126,48 + 32 -1,7)
       lx += 2
       ly += 2
-      print(food.instructions.up,lx,ly,7)
+      print(order.instructions.up,lx,ly,7)
       ly += 6
-      print(food.instructions.down,lx,ly,7)
+      print(order.instructions.down,lx,ly,7)
       ly+=6
       print('❎ serve',lx,ly,7)
     end
@@ -33,20 +33,21 @@ function run_level()
 
   score = 0
 
-  food = make_donut()
-  order = make_order(make_donut())
+  order = make_donut()
+  order:pick_version()
+  order:assign_food()
   
-
   game.update = level_update
   game.draw = level_draw
 end
 
 function level_update()
-  food:update()
+  order:update()
   if btnp(5) then
-    if food:is_match(order) then score += 1 end
-    food = make_donut()
-    order = make_order(make_donut())
+    if order:is_correct() then score += 1 end
+    order = make_donut()
+    order:pick_version()
+    order:assign_food()
   end
 end
 
@@ -54,14 +55,15 @@ function level_draw()
   cls()
   rectfill(0,0,127,127,13) --backgorund
   print(score,0,0,7)
-  print(food.choc,10,10,7)
   rectfill(48,48,48 + 32 -1,48 + 32 -1,1) --stage
   -- line(0,63,63,63,0)
   -- line(63,63,63,127,0)
   rectfill(0,104,127,127,15) --order text
   print(order.order_text,1,105,0) --order text
-  food:draw()
+  order:draw()
   instructions:draw()
+  print(order.attrs.choc,10,10,7)
+  print(order.food.attrs.choc,20,20,7)
 end
 
 function make_order(food)
@@ -70,11 +72,40 @@ end
 
 function make_donut()
   local d = {
+    attrs = {
+     choc = false,
+     sprinkles = false
+    },
+    food,
+    assign_food = function(self)
+     self.food = make_donut()
+    end,
+    pick_version = function(self)
+      local num = flr(rnd(4))  
+      if num == 0 then
+        self.attrs.choc = true
+        self.order_text = 'just chocolate please'
+      elseif num == 1 then
+        self.attrs.sprinkles = true
+        self.order_text = 'i only want sprinkles'
+      elseif num == 2 then
+        self.attrs.choc = true
+        self.attrs.sprinkles = true
+        self.order_text = 'gimme everything!'
+      else
+        self.order_text = 'i like it plain'
+      end
+    end,
+    order_text,
+    update = function(self)
+      if btnp(2) then self.food.attrs.choc = true end
+      if btnp(3) then self.food.attrs.sprinkles = true end
+    end,
     draw = function(self)
-      if self.choc == true then pal(15,4) end
+      if self.food.attrs.choc == true then pal(15,4) end
       spr(0,64 - 8,64 - 12,1,3)
       spr(0,64 - 8 + 8,64 - 12,1,3,true,false)
-      if self.sprinkles then
+      if self.food.attrs.sprinkles then
         pset(59,59,11)
         pset(63,56,14)
         pset(70,64,11)
@@ -87,36 +118,12 @@ function make_donut()
       pset(67,66,7) -- shine
       pal()
     end,
-    choc = false,
-    sprinkles = false,
-    pick_version = function(self)
-      local num = flr(rnd(4))  
-      if num == 0 then
-        self.choc = true
-        self.order_text = 'just chocolate please'
-      elseif num == 1 then
-        self.sprinkles = true
-        self.order_text = 'i only want sprinkles'
-      elseif num == 2 then
-        self.choc = true
-        self.sprinkles = true
-        self.order_text = 'gimme everything!'
-      else
-        self.order_text = 'i like it plain'
-      end
-      return self
-    end,
-    order_text = '',
-    update = function(self)
-      if btnp(2) then self.choc = true end
-      if btnp(3) then self.sprinkles = true end
-    end,
     instructions = {
       up = '⬆️ choc',
       down = '⬇️ sprnkls'
     },
-    is_match = function(self, order)
-      return self.choc == order.choc and self.sprinkles == order.sprinkles
+    is_correct = function(self)
+      return self.attrs.choc == self.food.attrs.choc and self.attrs.sprinkles == self.food.attrs.sprinkles
     end
   }
   return d
