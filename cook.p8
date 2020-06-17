@@ -64,23 +64,17 @@ function level_draw()
   print(food.order.attrs.choc,20,20,7)
 end
 
--- function make_order(food)
---   return food:pick_version()
--- end
-
 function make_donut()
   local d = {
     attrs = {
      choc = false,
      sprinkles = false
     },
-    order,
     assign_order = function(self)
-     self.order = make_donut()
-     self.order:pick_version()
+     self.order = make_donut():make_order()
     end,
-    pick_version = function(self)
-      local num = flr(rnd(4))  
+    make_order = function(self)
+      local num = flr(rnd(4))
       if num == 0 then
         self.attrs.choc = true
         self.order_text = 'just chocolate please'
@@ -94,8 +88,8 @@ function make_donut()
       else
         self.order_text = 'i like it plain'
       end
+      return self
     end,
-    order_text,
     update = function(self)
       if btnp(2) then self.attrs.choc = true end
       if btnp(3) then self.attrs.sprinkles = true end
