@@ -42,12 +42,18 @@ end
 
 function level_update()
   food:update()
+  if time() > 30 then run_game_over() end
 end
 
 function level_draw()
   cls()
   rectfill(0,0,127,127,13) --backgorund
-  print(score,0,0,7)
+  if time() < 20 then
+   print('time: '..flr(time()),0,0,11)
+  else
+   print('time: '..flr(time()),0,0,8)
+  end
+  print('score: '..score,0,10,7)
   rectfill(48,48,48 + 32 -1,48 + 32 -1,1) --stage
   -- line(0,63,63,63,0)
   -- line(63,63,63,127,0)
@@ -143,6 +149,23 @@ function make_donut()
     end
   }
   return d
+end
+
+function run_game_over()
+ game.update = game_over_update
+ game.draw = game_over_draw
+end
+
+function game_over_update()
+ if btnp(5) then run_level() end
+end
+
+function game_over_draw()
+ cls()
+ rectfill(0,0,127,127,0) --backgorund
+ print('outta time!',0,0,7)
+ print('your score is: '..score,0,7,7)
+ print('hit x to try again',0,14,7)
 end
 
 __gfx__
