@@ -35,6 +35,7 @@ function run_level()
 
   food = make_donut()
   food:assign_order()
+  food.is_staged = true
   
   game.update = level_update
   game.draw = level_draw
@@ -42,11 +43,6 @@ end
 
 function level_update()
   food:update()
-  if btnp(5) then
-    if food:matches_order() then score += 1 end
-    food = make_donut()
-    food:assign_order()
-  end
 end
 
 function level_draw()
@@ -57,8 +53,8 @@ function level_draw()
   -- line(0,63,63,63,0)
   -- line(63,63,63,127,0)
   rectfill(0,104,127,127,15) --order text
-  print(food.order.order_text,1,105,0) --order text
   food:draw()
+  print(food.order.order_text,1,105,0) --order text
   instructions:draw()
 end
 
@@ -68,6 +64,17 @@ function make_donut()
      choc = false,
      sprinkles = false
     },
+    x = function(self)
+     return self.center_x - (self.width/2)
+    end,
+    y = function(self)
+     return self.center_y - (self.height/2)
+    end,
+    center_x = 64,
+    center_y = 64,
+    width = 16,
+    height = 24,
+    is_staged = false,
     assign_order = function(self)
      self.order = make_donut():attach_order()
     end,
@@ -89,13 +96,21 @@ function make_donut()
       return self
     end,
     update = function(self)
-      if btnp(2) then self.attrs.choc = true end
-      if btnp(3) then self.attrs.sprinkles = true end
+      if self.is_staged then
+       if btnp(2) then self.attrs.choc = true end
+       if btnp(3) then self.attrs.sprinkles = true end
+       if btnp(5) then
+         if self:matches_order() then score += 1 end
+         food = make_donut()
+         food:assign_order()
+         food.is_staged = true
+       end
+      end
     end,
     draw = function(self)
       if self.attrs.choc == true then pal(15,4) end
-      spr(0,64 - 8,64 - 12,1,3)
-      spr(0,64 - 8 + 8,64 - 12,1,3,true,false)
+      spr(0,self:x(),self:y(),1,3)
+      spr(0,self:x() + (self.width/2),self:y(),1,3,true,false)
       if self.attrs.sprinkles then
         pset(59,59,11)
         pset(63,56,14)
