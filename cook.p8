@@ -120,8 +120,8 @@ function make_donut()
         pset(59,69,11)
         pset(69,58,11)
       end
-      line(68,61,68,65,7) -- shine
-      pset(67,66,7) -- shine
+      line(self.x + self.width - 4,self.y + 9,self.x + self.width - 4,self.y + 9 + 4,7) -- shine
+      pset(self.x + self.width - 4 - 1,self.y + 9 + 4 + 1,7) -- shine
       pal()
     end,
     instructions = {
