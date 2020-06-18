@@ -53,7 +53,7 @@ function level_draw()
   -- line(63,63,63,127,0)
   rectfill(0,104,127,127,15) --order text
   food:draw()
-  print(food.order.order_text,1,105,0) --order text
+  if food.is_staged then print(food.order.order_text,1,105,0) end--order text
   instructions:draw()
 end
 
@@ -112,6 +112,9 @@ function make_donut()
       spr(0,self.x,self.y,1,3)
       spr(0,self.x + (self.width/2),self.y,1,3,true,false)
       if self.attrs.sprinkles then
+        rect(64,67,65,68,11)
+        rect(57,60,58,61,11)
+        rect(65,58,66,59,14)
         pset(59,59,11)
         pset(63,56,14)
         pset(70,64,11)
