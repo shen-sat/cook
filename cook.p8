@@ -35,7 +35,6 @@ function run_level()
 
   food = make_donut()
   food:assign_order()
-  food.is_staged = true
   
   game.update = level_update
   game.draw = level_draw
@@ -64,14 +63,11 @@ function make_donut()
      choc = false,
      sprinkles = false
     },
-    x = function(self)
-     return self.center_x - (self.width/2)
+    x = 0,
+    y = 64 - (24/2),
+    center_x = function(self)
+     return self.x + (self.width/2)
     end,
-    y = function(self)
-     return self.center_y - (self.height/2)
-    end,
-    center_x = 64,
-    center_y = 64,
     width = 16,
     height = 24,
     is_staged = false,
@@ -103,14 +99,18 @@ function make_donut()
          if self:matches_order() then score += 1 end
          food = make_donut()
          food:assign_order()
-         food.is_staged = true
        end
+      elseif self:center_x() > 64 then
+       self.is_staged = true
+       self.x = 64 - (self.width/2)
+      else
+       self.x += 4
       end
     end,
     draw = function(self)
       if self.attrs.choc == true then pal(15,4) end
-      spr(0,self:x(),self:y(),1,3)
-      spr(0,self:x() + (self.width/2),self:y(),1,3,true,false)
+      spr(0,self.x,self.y,1,3)
+      spr(0,self.x + (self.width/2),self.y,1,3,true,false)
       if self.attrs.sprinkles then
         pset(59,59,11)
         pset(63,56,14)
