@@ -3,7 +3,7 @@ version 18
 __lua__
 function _init()
   game = {}
-  run_level()
+  run_intro()
 end
 
 function _update()
@@ -12,6 +12,25 @@ end
 
 function _draw()
   game.draw() 
+end
+
+function run_intro()
+ game.update = intro_update
+ game.draw = intro_draw
+end
+
+function intro_update()
+ if btnp(4) then run_level() end
+end
+
+function intro_draw()
+ cls()
+ print("welcome to bob's donuts!",0,0,7)
+ print("you are our newest recruit",0,14,7)
+ print("bob has high hopes for you!",0,21,7)
+ print("aim: correctly serve",0,35,7)
+ print("more than 20 donuts",0,42,7)
+ print("press z to start",0,56,7)
 end
 
 function run_level()
@@ -32,6 +51,7 @@ function run_level()
   }
 
   score = 0
+  timer = 0
 
   food = make_donut()
   food:assign_order()
@@ -41,17 +61,18 @@ function run_level()
 end
 
 function level_update()
-  food:update()
-  if time() > 30 then run_game_over() end
+ timer += 1/30 
+ food:update()
+ if timer > 30 then run_game_over() end
 end
 
 function level_draw()
   cls()
   rectfill(0,0,127,127,13) --backgorund
-  if time() < 20 then
-   print('time: '..flr(time()),0,0,11)
+  if timer < 18 then
+   print('time: '..flr(timer),0,0,11)
   else
-   print('time: '..flr(time()),0,0,8)
+   print('time: '..flr(timer),0,0,8)
   end
   print('score: '..score,0,10,7)
   rectfill(48,48,48 + 32 -1,48 + 32 -1,1) --stage
@@ -157,7 +178,7 @@ function run_game_over()
 end
 
 function game_over_update()
- if btnp(5) then run_level() end
+ if btnp(4) then run_level() end
 end
 
 function game_over_draw()
@@ -165,7 +186,12 @@ function game_over_draw()
  rectfill(0,0,127,127,0) --backgorund
  print('outta time!',0,0,7)
  print('your score is: '..score,0,7,7)
- print('hit x to try again',0,14,7)
+ if score >= 18 then
+  print('congrats! you beat a score of 18',0,14,7)
+ else
+  print('blud, you scored less than 18',0,14,7) 
+ end
+ print('hit z to replay',0,21,7)
 end
 
 __gfx__
