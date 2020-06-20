@@ -28,8 +28,8 @@ function intro_draw()
  print("welcome to bob's donuts!",0,0,7)
  print("you are our newest recruit",0,14,7)
  print("bob has high hopes for you!",0,21,7)
- print("aim: correctly serve",0,35,7)
- print("more than 20 donuts",0,42,7)
+ print("aim: correctly serve more than",0,35,7)
+ print("20 donuts in 30 seconds",0,42,7)
  print("press z to start",0,56,7)
 end
 
