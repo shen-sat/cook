@@ -105,16 +105,16 @@ function make_donut()
       local num = flr(rnd(4))
       if num == 0 then
         self.attrs.choc = true
-        self.order_text = 'just chocolate please'
+        self.order_text = 'the dark lord:\n\njust chocolate please'
       elseif num == 1 then
         self.attrs.sprinkles = true
-        self.order_text = 'i only want sprinkles'
+        self.order_text = 'kalei-dough-scope:\n\ni only want sprinkles'
       elseif num == 2 then
         self.attrs.choc = true
         self.attrs.sprinkles = true
-        self.order_text = 'gimme everything!'
+        self.order_text = 'greed:\n\ngimme everything!'
       else
-        self.order_text = 'i like it plain'
+        self.order_text = 'no-nut:\n\ni like it plain'
       end
       return self
     end,
