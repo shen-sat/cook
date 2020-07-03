@@ -53,8 +53,8 @@ function run_level()
   score = 0
   timer = 0
 
-  -- food = make_donut()
   food = make_coke()
+  -- food = make_donut()
   food:assign_order()
   
   game.update = level_update

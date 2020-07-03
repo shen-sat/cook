@@ -1,0 +1,6 @@
+Feedback:
+- font/up/down is not clear
+- countdown into starting game
+- timer should go down instead of up
+- make it a bit more difficult
+- reverse topping (ie correct a mistake - maybe press same button again?)
