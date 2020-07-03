@@ -49,8 +49,8 @@ function run_level()
   score = 0
   timer = 0
 
-  -- food = make_coke()
-  food = make_donut()
+  food = make_coke()
+  -- food = make_donut()
   food:assign_order()
   
   game.update = level_update
@@ -119,8 +119,21 @@ function make_coke()
     draw = function(self)
       spr(1,self.x,self.y,1,3)
       spr(1,self.x + (self.width/2),self.y,1,3,true,false)
-      rectfill(self.x + 8,self.y + 1,self.x + 8 + 3,self.y + 3 + 18,6)
-      rectfill(self.x + 8 + 3 + 1,self.y + 1,self.x + 8 + 3 + 2,self.y + 3 + 18,7)
+      rectfill(self.x + 8,self.y + 1,self.x + 8 + 3,self.y + 3 + 18,6) -- shine
+      rectfill(self.x + 8 + 3 + 1,self.y + 1,self.x + 8 + 3 + 2,self.y + 3 + 18,7) -- shine
+      if self.attrs.fill > 0 then
+       rectfill(self.x,self.y + 16,self.x + 7,self.y + 3 + 18,2) -- first fill
+      end
+      if self.attrs.fill > 1 then
+       rectfill(self.x,self.y + 11,self.x + 7,self.y + 3 + 18,2) -- 2nd fill
+      end
+      if self.attrs.fill > 2 then
+       rectfill(self.x,self.y + 6,self.x + 7,self.y + 3 + 18,2) -- 3th fill
+      end
+      if self.attrs.fill > 3 then
+       rectfill(self.x,self.y + 1,self.x + 7,self.y + 3 + 18,2) -- 4th fill
+       line(self.x,self.y,self.x + 15,self.y,15)
+      end
     end,
     instructions = {
       down = '⬇️ pour'
