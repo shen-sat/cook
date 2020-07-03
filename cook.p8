@@ -42,19 +42,15 @@ function run_level()
       rect(lx,ly,126,48 + 32 -1,7)
       lx += 2
       ly += 2
-      print(food.instructions.up,lx,ly,7)
-      ly += 6
-      print(food.instructions.down,lx,ly,7)
-      ly+=6
-      print('❎ serve',lx,ly,7)
+      draw_food_instructions(lx,ly)
     end
   }
 
   score = 0
   timer = 0
 
-  food = make_coke()
-  -- food = make_donut()
+  -- food = make_coke()
+  food = make_donut()
   food:assign_order()
   
   game.update = level_update
@@ -251,6 +247,18 @@ function game_over_draw()
   print('blud, you scored less than 18',0,14,7) 
  end
  print('hit z to replay',0,21,7)
+end
+
+function draw_food_instructions(lx,ly)
+ if food.instructions.up then
+  print(food.instructions.up,lx,ly,7)
+  ly += 6
+ end
+ if food.instructions.down then
+  print(food.instructions.down,lx,ly,7)
+  ly += 6
+ end
+ print('❎ serve',lx,ly,7)
 end
 
 __gfx__
